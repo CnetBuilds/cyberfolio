@@ -195,6 +195,27 @@
             position: relative;
         }
 
+        /* BUG FIX #1: use ID selector for #about so it's hidden initially */
+        #home {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #about {
+            display: none;
+        }
+
+        #certificates {
+            display: none;
+        }
+
+        #contact {
+            display: none;
+        }
+
         .section-container {
             background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(20px);
@@ -244,14 +265,6 @@
         }
 
         /* Home Section */
-        #home {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
         .profile-container {
             display: flex;
             flex-direction: column;
@@ -266,7 +279,6 @@
             object-fit: cover;
             border: 3px solid var(--primary);
             box-shadow: var(--neon-glow);
-
         }
 
         .home-content h1 {
@@ -332,21 +344,45 @@
             box-shadow: 0 0 15px rgba(10, 132, 255, 0.4);
         }
 
-        /* About Section */
-        #about {
-            display: none;
-        }
-
+        /* About Section — BUG FIX #4: min-width: 0 on grid children + image constraints */
         .about-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
+            min-width: 0;
+        }
+
+        .about-text,
+        .about-image {
+            min-width: 0;
+            width: 100%;
         }
 
         .about-text {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+        }
+
+        .about-image-box {
+            width: 100%;
+            height: 400px;
+            background: var(--glass);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .about-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            border-radius: 20px;
         }
 
         .skills {
@@ -372,10 +408,6 @@
         }
 
         /* Certificates Section */
-        #certificates {
-            display: none;
-        }
-
         .certificates-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -405,6 +437,7 @@
             background: linear-gradient(45deg, transparent, var(--glass), transparent);
             transform: translateX(-100%);
             transition: transform 0.6s ease;
+            pointer-events: none;
         }
 
         .certificate-card:hover::before {
@@ -443,6 +476,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: none;
             justify-content: center;
             align-items: center;
@@ -453,6 +487,7 @@
         .modal-content {
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 30px;
             width: 90%;
@@ -501,6 +536,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             object-fit: contain;
             max-height: 350px;
+            display: block;
         }
 
         .certificate-details {
@@ -533,6 +569,7 @@
 
         .certificate-detail-item p {
             color: var(--gray);
+            word-wrap: break-word;
         }
 
         .close-modal {
@@ -551,6 +588,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             z-index: 10;
+            font-size: 1.5rem;
         }
 
         .close-modal:hover {
@@ -559,20 +597,22 @@
         }
 
         /* Contact Section */
-        #contact {
-            display: none;
-        }
-
         .contact-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
+            min-width: 0;
         }
 
         .contact-info {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+            min-width: 0;
+        }
+
+        .contact-form {
+            min-width: 0;
         }
 
         .contact-item {
@@ -586,6 +626,7 @@
             color: inherit;
         }
 
+        /* BUG FIX #6: contact-icon is now an <a> OR a <div>; style both */
         .contact-icon {
             width: 50px;
             height: 50px;
@@ -598,6 +639,8 @@
             color: var(--primary);
             border: 1px solid var(--glass-border);
             transition: all 0.3s ease;
+            flex-shrink: 0;
+            text-decoration: none;
         }
 
         .contact-item:hover .contact-icon {
@@ -607,10 +650,21 @@
             box-shadow: var(--neon-glow);
         }
 
+        .contact-item p a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item p a:hover {
+            color: var(--primary);
+        }
+
         .social-links {
             display: flex;
             gap: 1rem;
             margin-top: 2rem;
+            flex-wrap: wrap;
         }
 
         .social-link {
@@ -640,6 +694,7 @@
             text-align: center;
             background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-top: 1px solid var(--glass-border);
             color: var(--gray);
         }
@@ -699,6 +754,14 @@
             .certificates-container {
                 grid-template-columns: 1fr;
             }
+
+            .about-image-box {
+                height: 280px;
+            }
+
+            .certificate-details {
+                max-height: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -723,11 +786,14 @@
                 padding: 0.4rem 0.8rem;
             }
 
-            .contact-item a {
-                text-decoration: none;
-                color: inherit;
+            .about-image-box {
+                height: 220px;
             }
 
+            .profile-img {
+                width: 150px;
+                height: 150px;
+            }
         }
     </style>
 </head>
@@ -756,10 +822,10 @@
     <section id="home">
         <div class="section-container">
             <div class="profile-container">
-                <img src="Images/i.png" alt="Profile" class="profile-img">
+                <img src="Images/i.png" alt="Sineth Dinuka profile picture" class="profile-img">
                 <div class="home-content">
                     <h1>Sineth Dinuka</h1>
-                    <p>Network Eng. & Cyber Security</p>
+                    <p>Network Eng. &amp; Cyber Security</p>
                     <div class="cta-buttons">
                         <a href="#" class="btn btn-primary" data-target="certificates">
                             <i class="fas fa-award"></i> View Certificates
@@ -779,7 +845,7 @@
             <h2 class="section-title">About Me</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <p>Hello! I'm Sineth, an aspiring Network & Cybersecurity and IT student passionate about
+                    <p>Hello! I'm Sineth, an aspiring Network &amp; Cybersecurity and IT student passionate about
                         networking, cybersecurity, software development, and modern technologies.</p>
                     <p>My interests span across cybersecurity, web development, IoT systems, and software engineering,
                         with hands-on experience through academic projects, self-learning, and technical communities.
@@ -788,7 +854,7 @@
                     <p>Beyond academics, I enjoy experimenting with new technologies, building websites and
                         applications, and exploring the constantly evolving world of IT and cybersecurity.</p>
 
-                    <h3>Skills & Technologies</h3>
+                    <h3>Skills &amp; Technologies</h3>
                     <div class="skills">
                         <span class="skill-tag">Cisco</span>
                         <span class="skill-tag">Networking</span>
@@ -801,9 +867,8 @@
                     </div>
                 </div>
                 <div class="about-image">
-                    <div
-                        style="width: 100%; height: 400px; background: var(--glass); border-radius: 20px; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center;">
-                        <img src="Images/cyber.jpg">
+                    <div class="about-image-box">
+                        <img src="Images/cyber.jpg" alt="Cybersecurity themed illustration">
                     </div>
                 </div>
             </div>
@@ -827,36 +892,25 @@
             <div class="contact-container">
                 <div class="contact-info">
                     <div class="contact-item">
-                        <div class="contact-icon">
-                            <a href="mailto:dinukasineth1@gmail.com">
-                                <i class="fas fa-envelope"></i>
-                        </div></a>
+                        <a href="mailto:dinukasineth1@gmail.com" class="contact-icon" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
                         <div>
                             <h3>Email</h3>
-                            <p>
-                                <a href="mailto:dinukasineth1@gmail.com">
-                                    dinukasineth1@gmail.com
-                                </a>
-                            </p>
+                            <p><a href="mailto:dinukasineth1@gmail.com">dinukasineth1@gmail.com</a></p>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <a href="tel:+94760429171">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
+                        <a href="tel:+94760429171" class="contact-icon" aria-label="Phone">
+                            <i class="fas fa-phone"></i>
                         </a>
                         <div>
                             <h3>Phone</h3>
-                            <p> <a href="tel:+94760429171">
-                                    +94 76 042 9171</a>
-                            </p>
-
-
+                            <p><a href="tel:+94760429171">+94 76 042 9171</a></p>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <div class="contact-icon">
+                        <div class="contact-icon" aria-hidden="true">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
                         <div>
@@ -867,16 +921,17 @@
 
                     <div class="social-links">
                         <a href="https://github.com/CnetBuilds" class="social-link" target="_blank"
-                            rel="noopener noreferrer">
+                            rel="noopener noreferrer" aria-label="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/sineth-dinuka" class="social-link" target="_blank">
+                        <a href="#" class="social-link" aria-label="LinkedIn">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
-                        <a href="https://wa.me/+94760429171" class="social-link" target="_blank">
+                        <a href="https://wa.me/+94760429171" class="social-link" target="_blank"
+                            rel="noopener noreferrer" aria-label="WhatsApp">
                             <i class="fab fa-whatsapp"></i>
                         </a>
-                        <a href="https://cnetbuilds.github.io/cyberfolio/" class="social-link">
+                        <a href="#" class="social-link" aria-label="Dribbble">
                             <i class="fab fa-dribbble"></i>
                         </a>
                     </div>
@@ -899,7 +954,7 @@
     <!-- Certificate Modal -->
     <div class="certificate-modal" id="certificateModal">
         <div class="modal-content">
-            <button class="close-modal">&times;</button>
+            <button class="close-modal" aria-label="Close">&times;</button>
             <div class="certificate-preview">
                 <img src="" alt="Certificate Preview" class="certificate-image" id="modalCertificateImage">
             </div>
@@ -921,7 +976,8 @@
                     <h3>Skills Validated</h3>
                     <p id="modal-certificate-skills">Skills list</p>
                 </div>
-                <a href="#" class="btn btn-primary" id="modal-certificate-link">
+                <a href="#" class="btn btn-primary" id="modal-certificate-link" target="_blank"
+                    rel="noopener noreferrer">
                     <i class="fas fa-external-link-alt"></i> View Full Certificate
                 </a>
             </div>
@@ -938,38 +994,51 @@
         const certificates = [
             {
                 id: 1,
-                title: "Diploma in Information Technology",
-                issuer: "Skills & Education Group Awards",
-                date: "06 Dec 2024",
-                description: "Level 3 Diploma in Information Technology — A comprehensive program covering modern IT fundamentals, including AI-integrated IT concepts, networking and hardware, web and graphic design, software engineering, Python programming, databases (SQL), and application development with C#. The course combines hands-on projects with industry-relevant tools to build a strong, future-ready foundation in information technology.",
+                title: "Higher Diploma In Networking Technology & Cyber Security",
+                issuer: "Cardiff Metropolitan University",
+                date: "July 30, 2026",
+                description: "Higher Diploma in Network Technology and Cybersecurity — Awarded by Cardiff Metropolitan University and delivered at ICBT Campus, Colombo. A comprehensive program covering network infrastructure, network design and administration, cybersecurity principles, information security, data protection, risk assessment, and secure network implementation. The course develops practical technical expertise alongside critical thinking, troubleshooting, problem-solving, and professional skills to prepare for careers in networking and cybersecurity.",
+                skills: "Network Technology, Cybersecurity, Network Administration, Network Security, Data Protection, Information Security, Network Design, Risk Assessment, Troubleshooting, IT Infrastructure, Problem Solving, Cyber Threat Analysis",
                 link: "#",
-                icon: "fas fa-cloud",
-                image: "Images/UKcertificate.png"
+                icon: "fa-solid fa-user-graduate",
+                image: "Images/HDcert.jpeg"
             },
             {
                 id: 2,
-                title: "SQL Injection Attacks",
-                issuer: "EC-Council",
-                date: "11 Jul 2024",
-                description: "SQL Injection Course – EC-Council — A practical cybersecurity course focused on understanding and exploiting SQL injection vulnerabilities. Covered both manual and automated techniques using tools such as sqlmap, jSQL, and Crunch on Kali Linux, while building the skills needed to identify and prevent critical database security flaws.",
-                skills: "SQL, Kali-Linux, Ethical Hacking, jSQL",
-                link: "https://learn.eccouncil.org/certificate/c293e9a5-c7a9-4790-a468-530f0c0c3831?logged=true",
-                icon: "fas fa-laptop-code",
-                image: "Images/SQL_Injection.png"
+                title: "Diploma in Information Technology",
+                issuer: "Skills & Education Group Awards",
+                date: "December 06, 2024",
+                description: "Level 3 Diploma in Information Technology — A comprehensive program covering modern IT fundamentals, including AI-integrated IT concepts, networking and hardware, web and graphic design, software engineering, Python programming, databases (SQL), and application development with C#. The course combines hands-on projects with industry-relevant tools to build a strong, future-ready foundation in information technology.",
+                // BUG FIX #2: missing skills field was showing 'undefined'
+                skills: "Information Technology, Networking, Python, SQL, C#, Web Design",
+                link: "#",
+                icon: "fa-solid fa-graduation-cap",
+                image: "Images/UKcertificate.png"
             },
             {
                 id: 3,
-                title: "Introduction to Dark Web, Anonymity, and Cryptocurrency",
+                title: "SQL Injection Attacks",
                 issuer: "EC-Council",
-                date: "01 Mar 2024",
-                description: "Dark Web, Anonymity & Cryptocurrency Course – EC-Council — A practical cybersecurity course covering Dark Web fundamentals, Onion services, and anonymous browsing using Tor and Proxychains on Windows and Kali Linux. Also introduced the basics of Bitcoin and its role in secure and anonymous online transactions.",
-                skills: "Dark web safety, JTor Browser, Proxychain",
-                link: "https://learn.eccouncil.org/certificate/9e2d1b33-629f-4f62-9b16-7ba1b94fa5cc?logged=true",
-                icon: "fas fa-mobile-alt",
-                image: "Images/IntroductionToDarkWeb.png"
+                date: "Jul 11, 2024",
+                description: "SQL Injection Course – EC-Council — A practical cybersecurity course focused on understanding and exploiting SQL injection vulnerabilities. Covered both manual and automated techniques using tools such as sqlmap, jSQL, and Crunch on Kali Linux, while building the skills needed to identify and prevent critical database security flaws.",
+                skills: "SQL, Kali-Linux, Ethical Hacking, jSQL",
+                link: "https://learn.eccouncil.org/certificate/c293e9a5-c7a9-4790-a468-530f0c0c3831?logged=true",
+                icon: "fa-solid fa-certificate",
+                image: "Images/SQL_Injection.png"
             },
             {
                 id: 4,
+                title: "Introduction to Dark Web, Anonymity, and Cryptocurrency",
+                issuer: "EC-Council",
+                date: "Mar 01, 2024",
+                description: "Dark Web, Anonymity & Cryptocurrency Course – EC-Council — A practical cybersecurity course covering Dark Web fundamentals, Onion services, and anonymous browsing using Tor and Proxychains on Windows and Kali Linux. Also introduced the basics of Bitcoin and its role in secure and anonymous online transactions.",
+                skills: "Dark web safety, Tor Browser, Proxychain",
+                link: "https://learn.eccouncil.org/certificate/9e2d1b33-629f-4f62-9b16-7ba1b94fa5cc?logged=true",
+                icon: "fa-solid fa-certificate",
+                image: "Images/IntroductionToDarkWeb.png"
+            },
+            {
+                id: 5,
                 title: "GitHub Fundamentals Workshop",
                 issuer: "StackNet",
                 date: "16 Jun 2026",
@@ -978,17 +1047,6 @@
                 link: "#",
                 icon: "fab fa-github",
                 image: "Images/StacknetGitHub.png"
-            },
-            {
-                id: 5,
-                title: "---Pending",
-                issuer: "-",
-                date: "-",
-                description: "-",
-                skills: "-",
-                link: "#",
-                icon: "fas fa-shield-alt",
-                image: ""
             },
             {
                 id: 6,
@@ -1012,95 +1070,99 @@
             const certificateModal = document.getElementById('certificateModal');
             const closeModal = document.querySelector('.close-modal');
 
-            // Show home section by default
-            document.getElementById('home').style.display = 'flex';
+            // Generate certificate cards — BUG FIX #5: skip placeholder certs
+            certificates
+                .filter(cert => cert.title && !cert.title.startsWith('---'))
+                .forEach(cert => {
+                    const card = document.createElement('div');
+                    card.className = 'certificate-card';
+                    card.setAttribute('data-certificate', cert.id);
 
-            // Generate certificate cards
-            certificates.forEach(cert => {
-                const card = document.createElement('div');
-                card.className = 'certificate-card';
-                card.setAttribute('data-certificate', cert.id);
+                    card.innerHTML = `
+                        <div class="certificate-icon">
+                            <i class="${cert.icon}"></i>
+                        </div>
+                        <h3 class="certificate-title">${cert.title}</h3>
+                        <p class="certificate-issuer">${cert.issuer}</p>
+                    `;
 
-                card.innerHTML = `
-                    <div class="certificate-icon">
-                        <i class="${cert.icon}"></i>
-                    </div>
-                    <h3 class="certificate-title">${cert.title}</h3>
-                    <p class="certificate-issuer">${cert.issuer}</p>
-                `;
-
-                certificatesGrid.appendChild(card);
-            });
+                    certificatesGrid.appendChild(card);
+                });
 
             // Navigation click handler
             function handleNavClick(e) {
                 e.preventDefault();
 
-                // Update active nav link with animation
                 navLinks.forEach(link => {
                     link.classList.remove('active');
                     link.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        link.style.transform = 'scale(1)';
-                    }, 150);
+                    setTimeout(() => { link.style.transform = 'scale(1);'; }, 150);
                 });
                 this.classList.add('active');
 
-                // Hide all sections
-                sections.forEach(section => {
-                    section.style.display = 'none';
-                });
+                sections.forEach(section => { section.style.display = 'none'; });
 
-                // Show target section
                 const targetId = this.getAttribute('data-target');
                 document.getElementById(targetId).style.display = 'flex';
             }
 
-            // Add event listeners to nav links
             navLinks.forEach(link => {
                 link.addEventListener('click', handleNavClick);
             });
 
-            // Add event listeners to buttons with data-target
+            // Buttons with data-target (View Certificates, Contact Me)
             buttons.forEach(button => {
                 button.addEventListener('click', function (e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('data-target');
 
-                    // Update active nav link
                     navLinks.forEach(link => link.classList.remove('active'));
-                    document.querySelector(`.nav-link[data-target="${targetId}"]`).classList.add('active');
+                    const matchingNav = document.querySelector(`.nav-link[data-target="${targetId}"]`);
+                    if (matchingNav) matchingNav.classList.add('active');
 
-                    // Hide all sections
-                    sections.forEach(section => {
-                        section.style.display = 'none';
-                    });
-
-                    // Show target section
+                    sections.forEach(section => { section.style.display = 'none'; });
                     document.getElementById(targetId).style.display = 'flex';
                 });
             });
 
-            // Certificate card click handler
+            // Certificate card click handler — with defensive data access
             certificatesGrid.addEventListener('click', function (e) {
                 const card = e.target.closest('.certificate-card');
-                if (card) {
-                    const certificateId = card.getAttribute('data-certificate');
-                    const certificate = certificates.find(c => c.id == certificateId);
+                if (!card) return;
 
-                    // Update modal content
-                    document.getElementById('modal-certificate-title').textContent = certificate.title;
-                    document.getElementById('modal-certificate-issuer').textContent = certificate.issuer;
-                    document.getElementById('modal-certificate-date').textContent = certificate.date;
-                    document.getElementById('modal-certificate-description').textContent = certificate.description;
-                    document.getElementById('modal-certificate-skills').textContent = certificate.skills;
-                    document.getElementById('modal-certificate-link').setAttribute('href', certificate.link);
-                    document.getElementById('modalCertificateImage').setAttribute('src', certificate.image);
+                const certificateId = card.getAttribute('data-certificate');
+                const certificate = certificates.find(c => String(c.id) === String(certificateId));
+                if (!certificate) return;
 
-                    // Show modal
-                    certificateModal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
+                document.getElementById('modal-certificate-title').textContent = certificate.title || '-';
+                document.getElementById('modal-certificate-issuer').textContent = certificate.issuer || '-';
+                document.getElementById('modal-certificate-date').textContent = certificate.date || '-';
+                document.getElementById('modal-certificate-description').textContent = certificate.description || '-';
+                // BUG FIX #2 (defensive): fallback if skills is missing
+                document.getElementById('modal-certificate-skills').textContent = certificate.skills || 'Not specified';
+
+                const linkEl = document.getElementById('modal-certificate-link');
+                linkEl.setAttribute('href', certificate.link || '#');
+                if (!certificate.link || certificate.link === '#') {
+                    linkEl.style.display = 'none';
+                } else {
+                    linkEl.style.display = 'inline-flex';
                 }
+
+                // BUG FIX #8: handle broken/missing image gracefully
+                const imgEl = document.getElementById('modalCertificateImage');
+                imgEl.style.display = 'block';
+                imgEl.onerror = function () {
+                    this.style.display = 'none';
+                };
+                if (certificate.image) {
+                    imgEl.setAttribute('src', certificate.image);
+                } else {
+                    imgEl.style.display = 'none';
+                }
+
+                certificateModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
             });
 
             // Close modal
@@ -1112,6 +1174,14 @@
             // Close modal when clicking outside
             certificateModal.addEventListener('click', function (e) {
                 if (e.target === certificateModal) {
+                    certificateModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && certificateModal.style.display === 'flex') {
                     certificateModal.style.display = 'none';
                     document.body.style.overflow = 'auto';
                 }
